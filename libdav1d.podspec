@@ -33,7 +33,7 @@ dav1d is a new AV1 cross-platform decoder, open-source, and focused on speed and
 
   s.source_files = 'dav1d/src/**/*.{h,c}', 'dav1d/include/**/*.h', 'generate/config.h', 'generate/vcs_version.h', 'generate/tmpl_16/*.c'
   s.public_header_files = 'dav1d/include/dav1d/*.h'
-  s.exclude_files = 'dav1d/src/arm', 'dav1d/src/ppc', 'dav1d/src/win32', 'dav1d/src/x86', 'dav1d/src/ext', 'dav1d/include/compat'
+  s.exclude_files = 'dav1d/src/ppc', 'dav1d/src/win32', 'dav1d/src/x86', 'dav1d/src/ext', 'dav1d/include/compat'
   
   s.pod_target_xcconfig = {
     'USE_HEADERMAP' => 'NO',

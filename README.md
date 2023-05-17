@@ -19,11 +19,13 @@ This repo also including the CocoaPods's spec file to use libdav1d.
 + tvOS 9.0
 + watchOS 2.0
 
-## Note
+## Note for architecture assembly optimization
 
-This Carthage and CocoaPods support, disable the architecture specify assembly code, and use the pure C implementation instead. This because both the lack support for CocoaPods and Xcode NASM compiler.
+This Carthage and CocoaPods support on x86_64, disable the architecture specify assembly code, and use the pure C implementation instead. This because both the lack support for CocoaPods and Xcode NASM compiler.
 
 If you want the best performance for specify architecture, try to read the [README](https://github.com/videolan/dav1d/blob/master/README.md) from dav1d to build the pre-built with Meson and Ninja by your own.
+
+The arm32 (armv7/armv7s for iOS, armv7k for watchOS) and arm64 (arm64 for iOS and M1 Mac) use the standard assembly and NEON, so we support them from v1.1.0, which benefit the performance.
 
 ## Installation
 
