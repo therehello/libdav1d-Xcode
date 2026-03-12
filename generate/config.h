@@ -44,11 +44,31 @@
 
 #define HAVE_AS_FUNC 0
 
+// aarch64 extensions detected by meson via cc.compiles() against the assembler.
+// HAVE_AS_ARCH_DIRECTIVE / AS_ARCH_LEVEL: meson probes the highest .arch level
+// the assembler accepts (armv8.2-a → armv8.4-a → armv8.6-a), then appends +crc
+// as a workaround for an older Clang bug (llvm/llvm-project#32220).
+// On Apple Clang the target arch comes from -arch arm64, so .arch is redundant
+// but harmless; the value below matches what meson would detect on Xcode 16+.
 #if __aarch64__
+#define HAVE_AS_ARCH_DIRECTIVE 1
+#define AS_ARCH_LEVEL armv8.6-a+crc
+
+// .arch_extension directives: meson tests each one individually.
+// These let asm.S selectively ENABLE/DISABLE instruction sets per code region.
 #define HAVE_AS_ARCHEXT_DOTPROD_DIRECTIVE 1
 #define HAVE_AS_ARCHEXT_I8MM_DIRECTIVE 1
+#define HAVE_AS_ARCHEXT_SVE_DIRECTIVE 1
+#define HAVE_AS_ARCHEXT_SVE2_DIRECTIVE 1
+
+// Instruction support: meson tests whether the actual instruction assembles.
+// Runtime CPU detection (sysctlbyname) decides whether to call these paths.
+// On Apple Silicon, SVE/SVE2 code compiles but is never executed at runtime
+// because Apple's cpu.c reports no SVE support.
 #define HAVE_DOTPROD 1
 #define HAVE_I8MM 1
+#define HAVE_SVE 1
+#define HAVE_SVE2 1
 #endif
 
 #define HAVE_C11_GENERIC 1
