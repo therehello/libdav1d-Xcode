@@ -45,8 +45,6 @@
 #define HAVE_AS_FUNC 0
 
 #if __aarch64__
-#define HAVE_AS_ARCH_DIRECTIVE 1
-#define AS_ARCH_LEVEL armv8.2-a+crc
 #define HAVE_AS_ARCHEXT_DOTPROD_DIRECTIVE 1
 #define HAVE_AS_ARCHEXT_I8MM_DIRECTIVE 1
 #define HAVE_DOTPROD 1
