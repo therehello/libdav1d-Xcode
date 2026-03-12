@@ -5,3 +5,7 @@
 #include "src/arm/64/mc_dotprod.S"
 #endif
 #endif
+
+#ifdef __MACH__
+.subsections_via_symbols
+#endif

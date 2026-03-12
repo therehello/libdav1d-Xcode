@@ -8,3 +8,7 @@
 #include "src/arm/32/cdef_tmpl.S"
 #endif
 #endif
+
+#ifdef __MACH__
+.subsections_via_symbols
+#endif
