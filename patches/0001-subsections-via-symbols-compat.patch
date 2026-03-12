@@ -1,0 +1,347 @@
+diff --git a/src/arm/64/cdef.S b/src/arm/64/cdef.S
+index 32b258ab..a9a0f837 100644
+--- a/src/arm/64/cdef.S
++++ b/src/arm/64/cdef.S
+@@ -147,7 +147,9 @@
+ .macro padding_func w, stride, rn, rw
+ function cdef_padding\w\()_8bpc_neon, export=1
+         cmp             w7,  #0xf // fully edged
+-        b.eq            cdef_padding\w\()_edged_8bpc_neon
++        b.ne            198f
++        b               cdef_padding\w\()_edged_8bpc_neon
++198:
+         movi            v30.8h,  #0x80, lsl #8
+         mov             v31.16b, v30.16b
+         sub             x0,  x0,  #2*(2*\stride+2)
+diff --git a/src/arm/64/cdef_tmpl.S b/src/arm/64/cdef_tmpl.S
+index d35d7a09..55726dd2 100644
+--- a/src/arm/64/cdef_tmpl.S
++++ b/src/arm/64/cdef_tmpl.S
+@@ -109,7 +109,9 @@ function cdef_filter\w\suffix\()_\bpc\()bpc_neon
+ .if \bpc == 8
+         ldr             w8,  [sp]                   // edges
+         cmp             w8,  #0xf
+-        b.eq            cdef_filter\w\suffix\()_edged_8bpc_neon
++        b.ne            198f
++        b               cdef_filter\w\suffix\()_edged_8bpc_neon
++198:
+ .endif
+ .if \pri
+ .if \bpc == 16
+diff --git a/src/arm/64/ipred.S b/src/arm/64/ipred.S
+index 5a375d8d..9e446b46 100644
+--- a/src/arm/64/ipred.S
++++ b/src/arm/64/ipred.S
+@@ -3459,7 +3459,9 @@ L(ipred_z3_fill1_large_h16):
+         cmp             w8,  w6                   // base >= max_base_y
+         lsr             w10, w7,  #6              // base
+         and             w11, w7,  #0x3e           // frac
+-        b.ge            ipred_z3_fill_padding_neon
++        b.lt            198f
++        b               ipred_z3_fill_padding_neon
++198:
+         add             x8,  x2,  w8,  uxtw
+         add             x10, x2,  w10, uxtw
+         dup             v4.16b,  w9               // frac
+@@ -3538,7 +3540,9 @@ endjumptable
+ function ipred_z3_fill_padding_neon, export=0
+         cmp             w3,  #16
+         movrel          x8,  ipred_z3_fill_padding_tbl
+-        b.gt            ipred_z3_fill_padding_wide
++        b.le            199f
++        b               ipred_z3_fill_padding_wide
++199:
+         // w3 = remaining width, w4 = constant height
+         mov             w12, w4
+ 
+diff --git a/src/arm/64/ipred16.S b/src/arm/64/ipred16.S
+index 2292a855..3b571b85 100644
+--- a/src/arm/64/ipred16.S
++++ b/src/arm/64/ipred16.S
+@@ -3474,7 +3474,9 @@ function ipred_z3_fill1_16bpc_neon, export=1
+         cmp             w8,  w6                   // base >= max_base_x
+         lsr             w10, w7,  #6              // base
+         and             w11, w7,  #0x3e           // frac
+-        b.ge            ipred_z3_fill_padding_neon
++        b.lt            198f
++        b               ipred_z3_fill_padding_neon
++198:
+         lsl             w8,  w8,  #1
+         lsl             w10, w10, #1
+         ldr             q0,  [x2, w8, uxtw]       // left[base]
+@@ -3516,7 +3518,9 @@ function ipred_z3_fill1_16bpc_neon, export=1
+         cmp             w8,  w6                   // base >= max_base_x
+         lsr             w10, w7,  #6              // base
+         and             w11, w7,  #0x3e           // frac
+-        b.ge            ipred_z3_fill_padding_neon
++        b.lt            197f
++        b               ipred_z3_fill_padding_neon
++197:
+         add             x8,  x2,  w8,  uxtw #1
+         add             x10, x2,  w10, uxtw #1
+         dup             v4.8h,   w9               // frac
+@@ -3576,7 +3580,9 @@ function ipred_z3_fill1_16bpc_neon, export=1
+         cmp             w8,  w6                   // base >= max_base_y
+         lsr             w10, w7,  #6              // base
+         and             w11, w7,  #0x3e           // frac
+-        b.ge            ipred_z3_fill_padding_neon
++        b.lt            196f
++        b               ipred_z3_fill_padding_neon
++196:
+         add             x8,  x2,  w8,  uxtw #1
+         add             x10, x2,  w10, uxtw #1
+         dup             v6.8h,   w9               // frac
+@@ -3671,7 +3677,9 @@ endjumptable
+ function ipred_z3_fill_padding_neon, export=0
+         cmp             w3,  #8
+         movrel          x8,  ipred_z3_fill_padding_tbl
+-        b.gt            ipred_z3_fill_padding_wide
++        b.le            195f
++        b               ipred_z3_fill_padding_wide
++195:
+         // w3 = remaining width, w4 = constant height
+         mov             w12, w4
+ 
+@@ -3805,7 +3813,9 @@ function ipred_z3_fill2_16bpc_neon, export=1
+         cmp             w8,  w6                   // base >= max_base_x
+         lsr             w10, w7,  #6              // base
+         and             w11, w7,  #0x3e           // frac
+-        b.ge            ipred_z3_fill_padding_neon
++        b.lt            194f
++        b               ipred_z3_fill_padding_neon
++194:
+         lsl             w8,  w8,  #1
+         lsl             w10, w10, #1
+         ldr             q0,  [x2, w8, uxtw]       // top[base]
+@@ -3847,7 +3857,9 @@ function ipred_z3_fill2_16bpc_neon, export=1
+         cmp             w8,  w6                   // base >= max_base_x
+         lsr             w10, w7,  #6              // base
+         and             w11, w7,  #0x3e           // frac
+-        b.ge            ipred_z3_fill_padding_neon
++        b.lt            193f
++        b               ipred_z3_fill_padding_neon
++193:
+         add             x8,  x2,  w8,  uxtw #1
+         add             x10, x2,  w10, uxtw #1
+         dup             v4.8h,   w9               // frac
+@@ -4205,7 +4217,9 @@ filter_fn 12
+ function ipred_filter_16bpc_neon, export=1
+         ldr             w8,  [sp]
+         cmp             w8,  0x3ff
+-        b.le            ipred_filter_10bpc_neon
++        b.gt            192f
++        b               ipred_filter_10bpc_neon
++192:
+         b               ipred_filter_12bpc_neon
+ endfunc
+ 
+diff --git a/src/arm/64/itx.S b/src/arm/64/itx.S
+index 7063cbde..2319a468 100644
+--- a/src/arm/64/itx.S
++++ b/src/arm/64/itx.S
+@@ -684,8 +684,8 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_4x4_8bpc_neon, export=1
+         b               L(itx_4x4_end)
+ 1:
+ .endif
+-        adr             x4,  inv_\txfm1\()_4h_x4_neon
+-        adr             x5,  inv_\txfm2\()_4h_x4_neon
++        movrel          x4, inv_\txfm1\()_4h_x4_neon
++        movrel          x5, inv_\txfm2\()_4h_x4_neon
+         b               inv_txfm_add_4x4_neon
+ endfunc
+ .endm
+@@ -914,11 +914,11 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_8x8_8bpc_neon, export=1
+ .ifc \txfm1\()_\txfm2, dct_dct
+         idct_dc         8,   8,   1
+ .endif
+-        adr             x5,  inv_\txfm2\()_8h_x8_neon
++        movrel          x5, inv_\txfm2\()_8h_x8_neon
+ .ifc \txfm1, identity
+         b               inv_txfm_identity_add_8x8_neon
+ .else
+-        adr             x4,  inv_\txfm1\()_8h_x8_neon
++        movrel          x4, inv_\txfm1\()_8h_x8_neon
+         b               inv_txfm_add_8x8_neon
+ .endif
+ endfunc
+@@ -1001,8 +1001,8 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_8bpc_neon, export=1
+ .ifc \txfm1\()_\txfm2, dct_dct
+         idct_dc         \w,  \h,  0
+ .endif
+-        adr             x4,  inv_\txfm1\()_\h\()h_x\w\()_neon
+-        adr             x5,  inv_\txfm2\()_\w\()h_x\h\()_neon
++        movrel          x4, inv_\txfm1\()_\h\()h_x\w\()_neon
++        movrel          x5, inv_\txfm2\()_\w\()h_x\h\()_neon
+         b               inv_txfm_add_\w\()x\h\()_neon
+ endfunc
+ .endm
+@@ -1469,12 +1469,12 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_16x16_8bpc_neon, export=1
+         idct_dc         16,  16,  2
+ .endif
+ .ifc \txfm1, identity
+-        adr             x9,  inv_txfm_horz_identity_16x8_neon
++        movrel          x9, inv_txfm_horz_identity_16x8_neon
+ .else
+-        adr             x9,  inv_txfm_horz_16x8_neon
+-        adr             x4,  inv_\txfm1\()_8h_x16_neon
++        movrel          x9, inv_txfm_horz_16x8_neon
++        movrel          x4, inv_\txfm1\()_8h_x16_neon
+ .endif
+-        adr             x5,  inv_\txfm2\()_8h_x16_neon
++        movrel          x5, inv_\txfm2\()_8h_x16_neon
+         mov             x13, #\eob_half
+         b               inv_txfm_add_16x16_neon
+ endfunc
+@@ -1643,15 +1643,15 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_8bpc_neon, export=1
+ .endif
+ .if \w == 4
+ .ifnc \txfm1, identity
+-        adr             x4,  inv_\txfm1\()_8h_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_8h_x\w\()_neon
+ .endif
+-        adr             x5,  inv_\txfm2\()_4h_x\h\()_neon
++        movrel          x5, inv_\txfm2\()_4h_x\h\()_neon
+         mov             w13, #\eob_half
+ .else
+ .ifnc \txfm1, identity
+-        adr             x4,  inv_\txfm1\()_4h_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_4h_x\w\()_neon
+ .endif
+-        adr             x5,  inv_\txfm2\()_8h_x\h\()_neon
++        movrel          x5, inv_\txfm2\()_8h_x\h\()_neon
+ .endif
+ .ifc \txfm1, identity
+         b               inv_txfm_identity_add_\w\()x\h\()_neon
+@@ -1816,9 +1816,9 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_8bpc_neon, export=1
+         idct_dc         \w,  \h,  1
+ .endif
+ .ifnc \txfm1, identity
+-        adr             x4,  inv_\txfm1\()_8h_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_8h_x\w\()_neon
+ .endif
+-        adr             x5,  inv_\txfm2\()_8h_x\h\()_neon
++        movrel          x5, inv_\txfm2\()_8h_x\h\()_neon
+ .if \w == 8
+         mov             x13, #\eob_half
+ .endif
+@@ -2385,7 +2385,7 @@ function inv_txfm_add_dct_dct_16x32_8bpc_neon, export=1
+         sub             sp,  sp,  #1024
+         movrel          x13, eob_16x32
+         ldrh            w12, [x13], #2
+-        adr             x4,  inv_dct_8h_x16_neon
++        movrel          x4, inv_dct_8h_x16_neon
+ 
+ .irp i, 0, 8, 16, 24
+         add             x6,  sp,  #(\i*16*2)
+@@ -2433,7 +2433,7 @@ function inv_txfm_add_dct_dct_32x16_8bpc_neon, export=1
+         mov             x15, x30
+         sub             sp,  sp,  #1024
+ 
+-        adr             x5,  inv_dct_8h_x16_neon
++        movrel          x5, inv_dct_8h_x16_neon
+ 
+ .irp i, 0, 8
+         add             x6,  sp,  #(\i*32*2)
+@@ -3204,7 +3204,7 @@ function inv_txfm_add_dct_dct_64x16_8bpc_neon, export=1
+         b.gt            2b
+ 
+ 3:
+-        adr             x5,  inv_dct_8h_x16_neon
++        movrel          x5, inv_dct_8h_x16_neon
+         mov             x8,  #64*2
+ .irp i, 0, 8, 16, 24, 32, 40, 48, 56
+         add             x6,  x0,  #(\i)
+@@ -3227,7 +3227,7 @@ function inv_txfm_add_dct_dct_16x64_8bpc_neon, export=1
+         movrel          x13, eob_16x32
+         ldrh            w12, [x13], #2
+ 
+-        adr             x4,  inv_dct_8h_x16_neon
++        movrel          x4, inv_dct_8h_x16_neon
+ .irp i, 0, 8, 16, 24
+         add             x6,  x5,  #(\i*16*2)
+ .if \i > 0
+diff --git a/src/arm/64/itx16.S b/src/arm/64/itx16.S
+index 31ee9be1..8f096008 100644
+--- a/src/arm/64/itx16.S
++++ b/src/arm/64/itx16.S
+@@ -583,7 +583,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_4x4_16bpc_neon, export=1
+         b               L(itx_4x4_end)
+ 1:
+ .endif
+-        adr             x5,  inv_\txfm1\()_4s_x4_neon
++        movrel          x5, inv_\txfm1\()_4s_x4_neon
+         movrel          x6,  X(inv_\txfm2\()_4h_x4_neon)
+         b               inv_txfm_add_4x4_neon
+ endfunc
+@@ -853,7 +853,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_8x8_16bpc_neon, export=1
+ .endif
+         movrel          x5,  X(inv_\txfm2\()_8h_x8_neon)
+         mov             w13, #\eob_half
+-        adr             x4,  inv_\txfm1\()_4s_x8_neon
++        movrel          x4, inv_\txfm1\()_4s_x8_neon
+         b               inv_txfm_add_8x8_neon
+ endfunc
+ .endm
+@@ -969,7 +969,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_16bpc_neon, export=1
+ .ifc \txfm1\()_\txfm2, dct_dct
+         idct_dc         \w,  \h,  0
+ .endif
+-        adr             x4,  inv_\txfm1\()_4s_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_4s_x\w\()_neon
+ .if \w == 4
+         mov             w13, #\eob_half
+ .endif
+@@ -1469,7 +1469,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_16x16_16bpc_neon, export=1
+ .ifc \txfm1\()_\txfm2, dct_dct
+         idct_dc         16,  16,  2
+ .endif
+-        adr             x4,  inv_\txfm1\()_4s_x16_neon
++        movrel          x4, inv_\txfm1\()_4s_x16_neon
+         movrel          x5,  X(inv_\txfm2\()_8h_x16_neon)
+ .ifc \txfm1, identity
+ .ifc \txfm2, identity
+@@ -1653,7 +1653,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_16bpc_neon, export=1
+         idct_dc         \w,  \h,  1
+ .endif
+ .if \w == 4
+-        adr             x4,  inv_\txfm1\()_4s_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_4s_x\w\()_neon
+         movrel          x5,  X(inv_\txfm2\()_4h_x\h\()_neon)
+ .ifc \txfm1, identity
+ .ifc \txfm2, identity
+@@ -1669,7 +1669,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_16bpc_neon, export=1
+ .endif
+ .endif
+ .else
+-        adr             x4,  inv_\txfm1\()_4s_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_4s_x\w\()_neon
+         movrel          x5,  X(inv_\txfm2\()_8h_x\h\()_neon)
+ .endif
+         b               inv_txfm_add_\w\()x\h\()_neon
+@@ -1974,7 +1974,7 @@ function inv_txfm_add_\txfm1\()_\txfm2\()_\w\()x\h\()_16bpc_neon, export=1
+ .ifc \txfm1\()_\txfm2, dct_dct
+         idct_dc         \w,  \h,  1
+ .endif
+-        adr             x4,  inv_\txfm1\()_4s_x\w\()_neon
++        movrel          x4, inv_\txfm1\()_4s_x\w\()_neon
+         movrel          x5,  X(inv_\txfm2\()_8h_x\h\()_neon)
+ .ifc \txfm1, identity
+ .ifc \txfm2, identity
+@@ -2691,7 +2691,7 @@ function inv_txfm_add_dct_dct_16x32_16bpc_neon, export=1
+         sub             sp,  sp,  #1024
+         movrel          x13, eob_16x32
+         ldrh            w12, [x13], #2
+-        adr             x4,  inv_dct_4s_x16_neon
++        movrel          x4, inv_dct_4s_x16_neon
+ 
+ .irp i, 0, 4, 8, 12, 16, 20, 24, 28
+         add             x6,  sp,  #(\i*16*2)
+@@ -3614,7 +3614,7 @@ function inv_txfm_add_dct_dct_16x64_16bpc_neon, export=1
+         movrel          x13, eob_16x32
+         ldrh            w12, [x13], #2
+ 
+-        adr             x4,  inv_dct_4s_x16_neon
++        movrel          x4, inv_dct_4s_x16_neon
+ .irp i, 0, 4, 8, 12, 16, 20, 24, 28
+         add             x6,  x5,  #(\i*16*2)
+ .if \i > 0
