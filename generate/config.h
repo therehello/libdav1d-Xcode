@@ -37,16 +37,29 @@
 
 #define ENDIANNESS_BIG 0
 
-// x86_64 need NSAM, but Xcode does not provide.
+// x86_64 need NASM, but Xcode does not provide.
 #if __arm__ || __aarch64__
 #define HAVE_ASM 1
 #endif
 
 #define HAVE_AS_FUNC 0
 
+#if __aarch64__
+#define HAVE_AS_ARCHEXT_DOTPROD_DIRECTIVE 1
+#define HAVE_AS_ARCHEXT_I8MM_DIRECTIVE 1
+#define HAVE_AS_ARCHEXT_SVE_DIRECTIVE 1
+#define HAVE_AS_ARCHEXT_SVE2_DIRECTIVE 1
+#define HAVE_DOTPROD 1
+#define HAVE_I8MM 1
+#define HAVE_SVE 1
+#define HAVE_SVE2 1
+#endif
+
 #define HAVE_C11_GENERIC 1
 
 #define HAVE_CLOCK_GETTIME 1
+
+#define HAVE_DLSYM 0
 
 #define HAVE_POSIX_MEMALIGN 1
 

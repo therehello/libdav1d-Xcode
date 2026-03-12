@@ -25,7 +25,7 @@ let package = Package(
             name: "libdav1d",
             dependencies: [],
             path: ".",
-            exclude: ["dav1d/src/arm", "dav1d/src/ppc", "dav1d/src/win32", "dav1d/src/x86", "dav1d/src/ext", "dav1d/include/compat"],
+            exclude: ["dav1d/src/arm", "dav1d/src/ppc", "dav1d/src/win32", "dav1d/src/x86", "dav1d/src/ext", "dav1d/src/loongarch", "dav1d/src/riscv", "dav1d/include/compat"],
             sources: ["dav1d/src", "dav1d/include", "generate"],
             publicHeadersPath: "include",
             cSettings: [.headerSearchPath("generate"), .headerSearchPath("dav1d"), .headerSearchPath("dav1d/include"), .headerSearchPath("dav1d/include/dav1d")]

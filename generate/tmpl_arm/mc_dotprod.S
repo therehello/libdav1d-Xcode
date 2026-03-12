@@ -2,10 +2,7 @@
 
 #if HAVE_ASM
 #if ARCH_AARCH64
-#include "src/arm/64/looprestoration.S"
-#endif
-#if ARCH_ARM
-#include "src/arm/32/looprestoration.S"
+#include "src/arm/64/mc_dotprod.S"
 #endif
 #endif
 

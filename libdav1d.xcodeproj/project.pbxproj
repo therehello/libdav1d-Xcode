@@ -136,6 +136,12 @@
 		32C7E95E2A14BCC80056990B /* ipred16.S in Sources */ = {isa = PBXBuildFile; fileRef = 32C7E94A2A14BCC80056990B /* ipred16.S */; };
 		32C7E95F2A14BCC80056990B /* cdef.S in Sources */ = {isa = PBXBuildFile; fileRef = 32C7E94B2A14BCC80056990B /* cdef.S */; };
 		32C7E9602A14BCC80056990B /* msac.S in Sources */ = {isa = PBXBuildFile; fileRef = 32C7E94C2A14BCC80056990B /* msac.S */; };
+		32D1F0022A15000000000001 /* ctx.c in Sources */ = {isa = PBXBuildFile; fileRef = 32D1F0012A15000000000001 /* ctx.c */; };
+		32D1F0042A15000000000001 /* pal.c in Sources */ = {isa = PBXBuildFile; fileRef = 32D1F0032A15000000000001 /* pal.c */; };
+		32D1F0062A15000000000001 /* pal.h in Headers */ = {isa = PBXBuildFile; fileRef = 32D1F0052A15000000000001 /* pal.h */; };
+		32D1F0082A15000000000001 /* arm-arch.h in Headers */ = {isa = PBXBuildFile; fileRef = 32D1F0072A15000000000001 /* arm-arch.h */; };
+		32D1F00A2A15000000000001 /* mc16_sve.S in Sources */ = {isa = PBXBuildFile; fileRef = 32D1F0092A15000000000001 /* mc16_sve.S */; };
+		32D1F00C2A15000000000001 /* mc_dotprod.S in Sources */ = {isa = PBXBuildFile; fileRef = 32D1F00B2A15000000000001 /* mc_dotprod.S */; };
 		32C7E9782A14C6840056990B /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 3218A009234B914200F7B8A3 /* version.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		32C7E9792A14C6880056990B /* picture.h in Headers */ = {isa = PBXBuildFile; fileRef = 32189E95234B8F2000F7B8A3 /* picture.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		32C7E97A2A14C6890056990B /* data.h in Headers */ = {isa = PBXBuildFile; fileRef = 32189E97234B8F2000F7B8A3 /* data.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -321,6 +327,12 @@
 		32C7E94B2A14BCC80056990B /* cdef.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = cdef.S; sourceTree = "<group>"; };
 		32C7E94C2A14BCC80056990B /* msac.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = msac.S; sourceTree = "<group>"; };
 		32C8C65B26A9A6080078F541 /* frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = frame.h; sourceTree = "<group>"; };
+		32D1F0012A15000000000001 /* ctx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ctx.c; sourceTree = "<group>"; };
+		32D1F0032A15000000000001 /* pal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pal.c; sourceTree = "<group>"; };
+		32D1F0052A15000000000001 /* pal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pal.h; sourceTree = "<group>"; };
+		32D1F0072A15000000000001 /* arm-arch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "arm-arch.h"; sourceTree = "<group>"; };
+		32D1F0092A15000000000001 /* mc16_sve.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = mc16_sve.S; sourceTree = "<group>"; };
+		32D1F00B2A15000000000001 /* mc_dotprod.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = mc_dotprod.S; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -516,6 +528,7 @@
 				32C7E84C2A14B81B0056990B /* ref.h */,
 				32C7E84D2A14B81B0056990B /* cdef.h */,
 				32C7E84E2A14B81B0056990B /* ctx.h */,
+				32D1F0012A15000000000001 /* ctx.c */,
 				32C7E84F2A14B81B0056990B /* ipred_prepare.h */,
 				32C7E8502A14B81B0056990B /* levels.h */,
 				32C7E8512A14B81B0056990B /* intra_edge.h */,
@@ -524,6 +537,8 @@
 				32C7E8542A14B81B0056990B /* decode.h */,
 				32C7E8552A14B81B0056990B /* scan.h */,
 				32C7E8562A14B81B0056990B /* lf_mask.h */,
+				32D1F0032A15000000000001 /* pal.c */,
+				32D1F0052A15000000000001 /* pal.h */,
 			);
 			name = src;
 			path = dav1d/src;
@@ -545,6 +560,7 @@
 				32C7E8432A14B81B0056990B /* asm-offsets.h */,
 				32C7E8442A14B81B0056990B /* cdef.h */,
 				32C7E8452A14B81B0056990B /* msac.h */,
+				32D1F0072A15000000000001 /* arm-arch.h */,
 			);
 			path = arm;
 			sourceTree = "<group>";
@@ -592,6 +608,8 @@
 				32C7E94A2A14BCC80056990B /* ipred16.S */,
 				32C7E94B2A14BCC80056990B /* cdef.S */,
 				32C7E94C2A14BCC80056990B /* msac.S */,
+				32D1F0092A15000000000001 /* mc16_sve.S */,
+				32D1F00B2A15000000000001 /* mc_dotprod.S */,
 			);
 			path = tmpl_arm;
 			sourceTree = "<group>";
@@ -663,6 +681,8 @@
 				32C7E9092A14B81C0056990B /* loopfilter.h in Headers */,
 				32C7E9072A14B81C0056990B /* cpu.h in Headers */,
 				328B167A234B932300AA4441 /* vcs_version.h in Headers */,
+				32D1F0062A15000000000001 /* pal.h in Headers */,
+				32D1F0082A15000000000001 /* arm-arch.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,6 +848,10 @@
 				32C7E88D2A14B81B0056990B /* picture.c in Sources */,
 				32C7E9312A14BAE60056990B /* looprestoration_tmpl_16.c in Sources */,
 				32C7E8832A14B81B0056990B /* intra_edge.c in Sources */,
+				32D1F0022A15000000000001 /* ctx.c in Sources */,
+				32D1F0042A15000000000001 /* pal.c in Sources */,
+				32D1F00A2A15000000000001 /* mc16_sve.S in Sources */,
+				32D1F00C2A15000000000001 /* mc_dotprod.S in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'libdav1d'
-  s.version          = '1.2.0'
+  s.version          = '1.5.3'
   s.summary          = 'dav1d is an AV1 decoder :)'
 
 # This description is used to generate tags and improve search results.
@@ -33,7 +33,7 @@ dav1d is a new AV1 cross-platform decoder, open-source, and focused on speed and
 
   s.source_files = 'dav1d/src/**/*.{h,c}', 'dav1d/include/**/*.h', 'generate/*.h', 'generate/tmpl_16/*.c', 'generate/tmpl_arm/*.S',
   s.public_header_files = 'dav1d/include/dav1d/*.h', 'generate/version.h'
-  s.exclude_files = 'dav1d/src/ppc', 'dav1d/src/win32', 'dav1d/src/x86', 'dav1d/src/ext', 'dav1d/include/compat'
+  s.exclude_files = 'dav1d/src/ppc', 'dav1d/src/win32', 'dav1d/src/x86', 'dav1d/src/ext', 'dav1d/src/loongarch', 'dav1d/src/riscv', 'dav1d/include/compat'
   
   s.pod_target_xcconfig = {
     'USE_HEADERMAP' => 'NO',
